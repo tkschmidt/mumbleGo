@@ -13,3 +13,7 @@ func TestBufCreation(t *testing.T) {
 		t.Errorf("Bytes are not correct")
 	}
 }
+
+func Testconnect2Mumble(t *testing.T) {
+	Connect2Mumble()
+}
