@@ -10,8 +10,8 @@ import (
 func createBuf(x uint64) *bytes.Buffer {
 	buf := new(bytes.Buffer)
 	var data = []interface{}{
-		uint8(0),
-		uint64(x),
+		C.int(0),
+		C.longlong(x),
 	}
 	for _, v := range data {
 		err := binary.Write(buf, binary.BigEndian, v)
