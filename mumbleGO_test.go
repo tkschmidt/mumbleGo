@@ -6,14 +6,31 @@ import (
 	"testing"
 )
 
-func TestBufCreation(t *testing.T) {
+func TestCreateBufC(t *testing.T) {
 	var time uint64 = 239179
 	fmt.Println()
-	if x := hex.EncodeToString(createBuf(time).Bytes()); x != "00000000000000000003a64b" {
+	if x := hex.EncodeToString(CreateBufC(time).Bytes()); x != "00000000000000000003a64b" {
 		t.Errorf("Bytes are not correct")
 	}
 }
 
-func Testconnect2Mumble(t *testing.T) {
-	Connect2Mumble()
+func TestCreateBuf(t *testing.T) {
+	// uint32 = int
+	// uint64 = long
+	var time uint64 = 239179
+	result := hex.EncodeToString(CreateBuf(time).Bytes())
+	fmt.Println(result)
+	if x := result; x != "00000000000000000003a64b" {
+		t.Errorf("Bytes are not correct")
+	}
+}
+
+// func TestConnect2Mumble(t *testing.T) {
+
+// 	recv := Connect2Mumble()
+// }
+
+func TestByte2String(t *testing.T) {
+	recv := Connect2Mumble()
+	Byte2String(recv)
 }
