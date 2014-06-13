@@ -40,7 +40,7 @@ func CreateBuf(x uint64) *bytes.Buffer {
 	return buf
 }
 
-func Connect2Mumble() []byte {
+func Connect2MumbleRecievePingPaket(x uint64) []byte {
 
 	var recv []byte = make([]byte, 24)
 
@@ -56,7 +56,7 @@ func Connect2Mumble() []byte {
 		fmt.Println(err)
 	}
 
-	_, err = conn.Write(CreateBuf(154011).Bytes())
+	_, err = conn.Write(CreateBuf(x).Bytes())
 	if err != nil {
 		fmt.Println("Write")
 		fmt.Println(err)
@@ -70,6 +70,12 @@ func Connect2Mumble() []byte {
 	return recv
 }
 
+type version struct {
+	A1 [1]byte
+	A2 [1]byte
+	A3 [1]byte
+	A4 [1]byte
+}
 type T1 struct {
 	// //F1 [5]byte
 	// F1 [4]byte
@@ -78,25 +84,14 @@ type T1 struct {
 	// F4 [4]byte
 	// F5 [4]byte
 
-	F1 uint32
+	F1 version
 	F2 uint64
 	F3 uint32
 	F4 uint32
 	F5 uint32
 }
 
-type T2 struct {
-	// //F1 [5]byte
-	// F1 [4]byte
-	// F2 [8]byte
-	// F3 [4]byte
-	// F4 [4]byte
-	// F5 [4]byte
-	F1 uint32
-	F2 uint64
-}
-
-func Byte2String(recv []byte) {
+func Byte2String(recv []byte) uint64 {
 	//b := CreateBuf(154011).Bytes()
 	var t1 T1
 
@@ -105,5 +100,5 @@ func Byte2String(recv []byte) {
 	if err != nil {
 		fmt.Println("binary.Read failed:", err)
 	}
-	fmt.Println(t1)
+	return t1.F2
 }

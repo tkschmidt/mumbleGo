@@ -2,13 +2,11 @@ package mumbleGO
 
 import (
 	"encoding/hex"
-	"fmt"
 	"testing"
 )
 
 func TestCreateBufC(t *testing.T) {
 	var time uint64 = 239179
-	fmt.Println()
 	if x := hex.EncodeToString(CreateBufC(time).Bytes()); x != "00000000000000000003a64b" {
 		t.Errorf("Bytes are not correct")
 	}
@@ -19,18 +17,16 @@ func TestCreateBuf(t *testing.T) {
 	// uint64 = long
 	var time uint64 = 239179
 	result := hex.EncodeToString(CreateBuf(time).Bytes())
-	fmt.Println(result)
 	if x := result; x != "00000000000000000003a64b" {
 		t.Errorf("Bytes are not correct")
 	}
 }
 
-// func TestConnect2Mumble(t *testing.T) {
+func TestGettingIdentityBack(t *testing.T) {
+	var ident uint64 = 154011
+	recv := Connect2MumbleRecievePingPaket(ident)
 
-// 	recv := Connect2Mumble()
-// }
-
-func TestByte2String(t *testing.T) {
-	recv := Connect2Mumble()
-	Byte2String(recv)
+	if x := Byte2String(recv); x != 154011 {
+		t.Errorf("ident doesn't come back")
+	}
 }
