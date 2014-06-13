@@ -24,9 +24,17 @@ func TestCreateBuf(t *testing.T) {
 
 func TestGettingIdentityBack(t *testing.T) {
 	var ident uint64 = 154011
-	recv := Connect2MumbleRecievePingPaket(ident)
+	recv := Connect2MumbleRecievePingPaket(ident, "95.143.172.148", "61030")
 
 	if x := Byte2String(recv); x != 154011 {
 		t.Errorf("ident doesn't come back")
+	}
+}
+
+func TestConcatServerPort(t *testing.T) {
+	var server string = "95.143.172.148"
+	var port string = "61030"
+	if x := ConcatServerPort(server, port); x != "95.143.172.148:61030" {
+		t.Errorf("concatination doesn't work")
 	}
 }

@@ -5,8 +5,6 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-)
-import (
 	"net"
 )
 
@@ -40,11 +38,11 @@ func CreateBuf(x uint64) *bytes.Buffer {
 	return buf
 }
 
-func Connect2MumbleRecievePingPaket(x uint64) []byte {
+func Connect2MumbleRecievePingPaket(identity uint64, server string, port string) []byte {
 
 	var recv []byte = make([]byte, 24)
 
-	addr, err := net.ResolveUDPAddr("udp", "95.143.172.148:61030")
+	addr, err := net.ResolveUDPAddr("udp", ConcatServerPort(server, port))
 	if err != nil {
 		fmt.Println("ResolveUDPAddr")
 		fmt.Println(err)
@@ -56,7 +54,7 @@ func Connect2MumbleRecievePingPaket(x uint64) []byte {
 		fmt.Println(err)
 	}
 
-	_, err = conn.Write(CreateBuf(x).Bytes())
+	_, err = conn.Write(CreateBuf(identity).Bytes())
 	if err != nil {
 		fmt.Println("Write")
 		fmt.Println(err)
@@ -70,35 +68,29 @@ func Connect2MumbleRecievePingPaket(x uint64) []byte {
 	return recv
 }
 
-type version struct {
-	A1 [1]byte
-	A2 [1]byte
-	A3 [1]byte
-	A4 [1]byte
-}
-type T1 struct {
-	// //F1 [5]byte
-	// F1 [4]byte
-	// F2 [8]byte
-	// F3 [4]byte
-	// F4 [4]byte
-	// F5 [4]byte
-
-	F1 version
-	F2 uint64
-	F3 uint32
-	F4 uint32
-	F5 uint32
-}
-
 func Byte2String(recv []byte) uint64 {
-	//b := CreateBuf(154011).Bytes()
 	var t1 T1
-
 	buf := bytes.NewReader(recv)
 	err := binary.Read(buf, binary.BigEndian, &t1)
 	if err != nil {
 		fmt.Println("binary.Read failed:", err)
 	}
 	return t1.F2
+}
+
+func ConcatServerPort(server string, port string) string {
+	var buffer bytes.Buffer
+	_, err := buffer.WriteString(server)
+	if err != nil {
+		fmt.Println("couldn't write to buffer", err)
+	}
+	_, err = buffer.WriteString(":")
+	if err != nil {
+		fmt.Println("couldn't write to buffer", err)
+	}
+	_, err = buffer.WriteString(port)
+	if err != nil {
+		fmt.Println("couldn't write to buffer", err)
+	}
+	return buffer.String()
 }
